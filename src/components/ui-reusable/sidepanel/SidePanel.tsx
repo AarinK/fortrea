@@ -62,13 +62,11 @@ const Sidebar: React.FC = () => {
         { title: 'Report Panels', icon: ReportPortalIcon },
       ],
     },
-    // Add other menu items as needed
   ]);
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Effect to add click listener on mount
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
@@ -113,7 +111,7 @@ const Sidebar: React.FC = () => {
                   onClick={() => toggleMenuItem(index)}
                   className={`flex items-center justify-between h-11 focus:outline-none ${item.isOpen ? 'text-white' : 'text-white'} hover:text-white`}
                 >
-                  <span className={`ml-2 text-sm tracking-wide truncate ${isCollapsed ? 'hidden' : 'block'}`}>{item.title}</span>
+                  <span className={`ml-2 text-sm tracking-wide truncate ${isCollapsed ? 'block' : 'block'}`}>{item.title}</span>
                   {!isCollapsed && (
                     <img
                       src={ArrowIcon}
