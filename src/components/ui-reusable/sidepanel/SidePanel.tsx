@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './SidePanel.css';
-import Logo from '../../images/logo.png'; // Add your logo image here
-import ArrowIcon from '../../images/arrow-icon.png'; 
+import SmallLogo from '../../images/smallLogo.png';
+import Logo from '../../images/logo.png';
+import ArrowIcon from '../../images/arrow-icon.png';
 import SettingsIcon from '../../images/settings.png';
 import UsersIcon from '../../images/userManagement.png';
 import AuthIcon from '../../images/auth.png';
@@ -17,9 +18,9 @@ import TemplateManagerIcon from '../../images/templateManager.png';
 
 const Sidebar: React.FC = () => {
   const [menuItems, setMenuItems] = useState([
-    { 
-      title: 'System', 
-      isOpen: false, 
+    {
+      title: 'System',
+      isOpen: true,
       subOptions: [
         { title: 'Settings', icon: SettingsIcon },
         { title: 'User Interface', icon: UsersIcon },
@@ -34,11 +35,11 @@ const Sidebar: React.FC = () => {
         { title: 'Upgrade', icon: CurrencyIcon },
         { title: 'Clear Cache', icon: NotificationIcon },
         { title: 'Rebuild', icon: SettingsIcon },
-      ]
+      ],
     },
     {
       title: 'Users',
-      isOpen: false,
+      isOpen: true,
       subOptions: [
         { title: 'Users', icon: UsersIcon },
         { title: 'Teams', icon: SettingsIcon },
@@ -47,11 +48,11 @@ const Sidebar: React.FC = () => {
         { title: 'Auth Tokens', icon: UsersIcon },
         { title: 'Action History', icon: SettingsIcon },
         { title: 'API Users', icon: AuthIcon },
-      ]
+      ],
     },
     {
       title: 'Customization',
-      isOpen: false,
+      isOpen: true,
       subOptions: [
         { title: 'Entity Manager', icon: EntityManagerIcon },
         { title: 'Layout Manager', icon: LayoutManagerIcon },
@@ -59,10 +60,32 @@ const Sidebar: React.FC = () => {
         { title: 'Template Manager', icon: TemplateManagerIcon },
         { title: 'Report Filters', icon: ReportFilterIcon },
         { title: 'Report Panels', icon: ReportPortalIcon },
-      ]
+      ],
     },
     // Add other menu items as needed
   ]);
+
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // Effect to add click listener on mount
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsCollapsed(true);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  const handleSidebarClick = () => {
+    setIsCollapsed(false);
+  };
 
   const toggleMenuItem = (index: number) => {
     const updatedMenuItems = [...menuItems];
@@ -71,38 +94,44 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-white">
-      <div className="fixed top-0 left-0 w-64 bg-red h-full border-r" style={{ backgroundColor: '#613FAA'}}>
-        <div className="flex items-center justify-start h-10 w-52 border-b mx-auto" style={{ backgroundColor: 'white', borderRadius: '4px', marginTop: '1.3rem', paddingLeft: '0.5rem' }}>
-          <img src={Logo} alt="Logo" className="h-8" />
+    <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-white`}>
+      <div
+        ref={sidebarRef}
+        onClick={handleSidebarClick}
+        className={`fixed top-0 left-0 h-full border-r sidebar ${isCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'}`}
+      >
+        <div
+          className={`flex items-center justify-center h-12 logo-container ${isCollapsed ? 'logo-collapsed' : 'logo-expanded'}`}
+        >
+          <img src={isCollapsed ? SmallLogo : Logo} alt="New Logo" className={`h-8`} />
         </div>
         <div className="overflow-y-auto overflow-x-hidden flex-grow">
           <ul className="flex flex-col py-4 space-y-1">
             {menuItems.map((item, index) => (
-              <li key={index} className={`relative sidebar-item ${item.isOpen ? '' : ''}`}>
+              <li key={index} className={`relative sidebar-item`}>
                 <button
                   onClick={() => toggleMenuItem(index)}
                   className={`flex items-center justify-between h-11 focus:outline-none ${item.isOpen ? 'text-white' : 'text-white'} hover:text-white`}
                 >
-                  <span className="ml-2 text-sm tracking-wide truncate">{item.title}</span>
-                  <img
-                    src={ArrowIcon}
-                    alt="Arrow"
-                    className={`w-4 h-4 ml-auto transform transition-transform ${item.isOpen ? 'rotate-180' : '-rotate-0'}`}
-                  />
+                  <span className={`ml-2 text-sm tracking-wide truncate ${isCollapsed ? 'hidden' : 'block'}`}>{item.title}</span>
+                  {!isCollapsed && (
+                    <img
+                      src={ArrowIcon}
+                      alt="Arrow"
+                      className={`w-4 h-4 ml-auto transform transition-transform ${item.isOpen ? 'rotate-0' : 'rotate-180'}`}
+                    />
+                  )}
                 </button>
-                {item.isOpen && (
-                  <ul className="pl-6 mt-1">
-                    {item.subOptions.map((option, subIndex) => (
-                      <li key={subIndex} className="mb-1">
-                        <a href="#" className="flex items-center text-sm hover:bg-gray-800 hover:text-white rounded-lg py-1 px-3">
-                          <img src={option.icon} alt="" className="w-4 h-4 mr-2" />
-                          <span className="ml-2">{option.title}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <ul className={`pl-6 mt-1 ${item.isOpen ? 'block' : 'hidden'}`}>
+                  {item.subOptions.map((option, subIndex) => (
+                    <li key={subIndex} className="mb-1">
+                      <a href="#" className="flex items-center text-sm hover:bg-gray-800 hover:text-white rounded-lg py-1 px-3">
+                        <img src={option.icon} alt="" className="w-4 h-4 mr-2" />
+                        <span className={`ml-2 ${isCollapsed ? 'hidden' : 'block'}`}>{option.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
