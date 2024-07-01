@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './SidePanel.css';
 import SmallLogo from '../../images/smallLogo.png';
 import Logo from '../../images/logo.png';
 import ArrowIcon from '../../images/arrow-icon.png';
@@ -92,14 +91,14 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-white`}>
+    <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-white">
       <div
         ref={sidebarRef}
         onClick={handleSidebarClick}
-        className={`fixed top-0 left-0 h-full border-r sidebar ${isCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'}`}
+        className={`fixed top-0 left-0 h-full border-r sidebar ${isCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'} bg-sidebar-bg border-gray-200 transition-width duration-400`}
       >
         <div
-          className={`flex items-center justify-center h-12 logo-container ${isCollapsed ? 'logo-collapsed' : 'logo-expanded'}`}
+          className={`flex items-center justify-center h-12 logo-container ${isCollapsed ? 'logo-collapsed' : 'logo-expanded'} bg-white rounded-md mt-5rem px-5 transition-width duration-400 ml-5rem`}
         >
           <img src={isCollapsed ? SmallLogo : Logo} alt="New Logo" className={`h-8`} />
         </div>
@@ -116,14 +115,14 @@ const Sidebar: React.FC = () => {
                     <img
                       src={ArrowIcon}
                       alt="Arrow"
-                      className={`w-4 h-4 ml-auto transform transition-transform ${item.isOpen ? 'rotate-0' : 'rotate-180'}`}
+                      className={`w-4 h-4 ml-auto transform transition-transform duration-400 ${item.isOpen ? 'rotate-0' : 'rotate-90'}`}
                     />
                   )}
                 </button>
                 <ul className={`pl-6 mt-1 ${item.isOpen ? 'block' : 'hidden'}`}>
                   {item.subOptions.map((option, subIndex) => (
                     <li key={subIndex} className="mb-1">
-                      <a href="#" className="flex items-center text-sm hover:bg-gray-800 hover:text-white rounded-lg py-1 px-3">
+                      <a href="#" className="flex items-center text-sm hover:bg-sidebar-item-hover hover:text-white rounded-lg py-1 px-3">
                         <img src={option.icon} alt="" className="w-4 h-4 mr-2" />
                         <span className={`ml-2 ${isCollapsed ? 'hidden' : 'block'}`}>{option.title}</span>
                       </a>
