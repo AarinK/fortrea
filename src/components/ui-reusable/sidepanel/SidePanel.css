@@ -8,6 +8,7 @@
   transition: width 0.4s ease;
   max-height: 100vh;
   overflow-y: auto;
+  width: 20%; /* Set initial width to 20% */
 }
 
 .sidebar::-webkit-scrollbar {
@@ -24,7 +25,7 @@
 }
 
 .sidebar-expanded {
-  width: 16rem;
+  width: 20%; /* Updated to 20% */
 }
 
 .sidebar-collapsed {
@@ -43,7 +44,8 @@
 }
 
 .logo-expanded {
-  width: 13rem;
+  align-self: center;
+  width: calc(93% - 1.3rem); /* Adjust based on sidebar width */
   height: 3rem;
   justify-content: flex-start;
 }

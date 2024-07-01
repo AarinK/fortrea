@@ -1,0 +1,53 @@
+/* DatePicker.css */
+
+/* Custom styles for date picker */
+.date-picker {
+    position: relative;
+}
+
+.date-picker input {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #e2e8f0;
+    width: 200px;
+    outline: none;
+}
+
+.date-picker .calendar {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background-color: #fff;
+    border: 1px solid #cbd5e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.date-picker.open .calendar {
+    display: block;
+}
+
+.date-picker .calendar table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.date-picker .calendar table th,
+.date-picker .calendar table td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid #cbd5e0;
+}
+
+.date-picker .calendar table th {
+    background-color: #f7fafc;
+}
+
+.date-picker .calendar table td {
+    cursor: pointer;
+}
+
+.date-picker .calendar table td:hover {
+    background-color: #edf2f7;
+}
